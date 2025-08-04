@@ -44,7 +44,11 @@
 // require('dotenv').config();
 // const { MNEMONIC, PROJECT_ID } = process.env;
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const fs = require('fs');
+const mnemonicPhrase = fs.readFileSync(".secret").toString().trim();
+const infuraProjectId = fs.readFileSync(".infura").toString().trim();
+const etherscanKey = fs.readFileSync(".etherscan").toString().trim();
 
 module.exports = {
   /**
@@ -62,7 +66,20 @@ module.exports = {
       host: "127.0.0.1",
       port: 8545,
       network_id: "*", // Match any network id
-}
+    },
+
+    sepolia: {
+      provider: () => new HDWalletProvider(
+        mnemonicPhrase,
+        `https://sepolia.infura.io/v3/${infuraProjectId}`
+      ),
+      network_id: 11155111, // Sepolia's network id
+      confirmations: 2,     // # of confirmations to wait between deployments
+      timeoutBlocks: 200,   // # of blocks before a deployment times out
+      skipDryRun: true      // Skip dry run before migrations
+    },
+
+
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
     // You should run a client (like ganache, geth, or parity) in a separate terminal
@@ -122,6 +139,11 @@ module.exports = {
       // }
     }
   },
+
+  plugins:['truffle-plugin-verify'],
+  api_keys:{
+    etherscan: etherscanKey // Etherscan API key for contract verification
+  }
 
   // Truffle DB is currently disabled by default; to enable it, change enabled:
   // false to enabled: true. The default storage location can also be
