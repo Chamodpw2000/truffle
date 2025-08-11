@@ -25,7 +25,7 @@ create the migration script in the migrations directory, e.g., 1_initial_migrati
 
 migrate - this command deploys your contracts to the local blockchain. It runs the migration scripts in the migrations directory in order.
 
-this command ccreates the build directory, which contains the compiled contracts and their ABI files.
+this command creates the build directory, which contains the compiled contracts and their ABI files.
 
 Then we can install ganache and run it to create a local blockchain for testing.
 
